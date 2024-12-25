@@ -5,7 +5,7 @@
 template <typename T>
 class SplayTree
 {
-private:
+public:
     // Node structure definition
     class Node
     {
@@ -18,15 +18,17 @@ private:
         Node(const T& value) : key(value), left(nullptr), right(nullptr) {}
     };
 
-    Node* root;
 
     Node* splayHelper(Node* subtreeRoot, const T& key);
     Node* rightRotate(Node* x);
     Node* leftRotate(Node* x);
 
 public:
+    Node* root;
+
     SplayTree() : root(nullptr) {}
     ~SplayTree();
+    Node* getRoot();
 
     void splay(const T& key);
     void insert(const T& key);
@@ -40,11 +42,10 @@ public:
 private:
     void inorderAux(std::ostream& out, Node* subtreeRoot, int currentDepth, int maxDepth) const;
     void deleteTree(Node* subtreeRoot);
+    bool search(const T& key);
 };
 
-// Implementation
 
-/// Destructor
 template <typename T>
 SplayTree<T>::~SplayTree()
 {
@@ -163,11 +164,10 @@ void SplayTree<T>::insert(const T& key)
         return;
     }
 
-
-    root = splayHelper(root, key);
-    root->time = time(NULL);
-    if (root->key == key)
+    if(search(key))
+    {
         return;
+    }
 
     Node* newNode = new Node(key);
     newNode->time =time(NULL);
@@ -188,6 +188,17 @@ void SplayTree<T>::insert(const T& key)
     root = newNode;
 }
 
+template <typename T>
+bool SplayTree<T>:: search(const T& key)
+{
+    root = splayHelper(root, key);
+    system("pause");
+    root->time = time(NULL);
+    if (root->key != key)
+        return false;
+    return true;
+}
+
 // Remove operation
 template <typename T>
 void SplayTree<T>::remove(const T& key)
@@ -198,7 +209,7 @@ void SplayTree<T>::remove(const T& key)
     root = splayHelper(root, key);
     system("pause");
     root->time = time(NULL);
-    if (root->key != key)
+    if (!search(key))
         return;
 
     Node* temp;
@@ -244,4 +255,10 @@ void SplayTree<T>::inorderAux(std::ostream& out, Node* subtreeRoot, int currentD
     out << subtreeRoot->key << "\t" << subtreeRoot->time << std::endl;
 
     inorderAux(out, subtreeRoot->right, currentDepth + 1, maxDepth);
+}
+
+template <typename T>
+typename SplayTree<T>::Node* SplayTree<T>::getRoot()
+{
+    return root;
 }

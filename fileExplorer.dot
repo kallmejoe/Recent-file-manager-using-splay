@@ -1,0 +1,15 @@
+digraph FileExplorer {
+    node [shape=folder];
+    subgraph cluster_Folder2 {
+        label = "Folder2";
+        node [shape=circle];
+    "Folder2_file4" -> "Folder2_file3";
+    }
+    subgraph cluster_Folder1 {
+        label = "Folder1";
+        node [shape=circle];
+    "Folder1_file11" -> "Folder1_file10";
+    "Folder1_file10" -> "Folder1_file1";
+    "Folder1_file11" -> "Folder1_file2";
+    }
+}
