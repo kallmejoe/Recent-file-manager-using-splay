@@ -1,13 +1,4 @@
-digraph FileExplorer {
-    node [shape=folder];
-    subgraph cluster_Folder2 {
-        label = "Folder2";
-        node [shape=circle];
-    "Folder2_file4" -> "Folder2_file3";
-    }
-    subgraph cluster_Folder1 {
-        label = "Folder1";
-        node [shape=circle];
-    "Folder1_file2" -> "Folder1_file1";
-    }
+digraph BST {
+    node [shape=circle];
+    "fileManager_file2" -> "fileManager_file1";
 }

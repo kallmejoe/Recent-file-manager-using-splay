@@ -2,7 +2,6 @@
 #include <fstream>
 #include <iostream>
 
-// Destructor to clean up the linked list
 FileExplorer::~FileExplorer() {
     FolderNode* current = head;
     while (current != nullptr) {
@@ -12,14 +11,12 @@ FileExplorer::~FileExplorer() {
     }
 }
 
-// Add a new folder to the linked list
 void FileExplorer::addFolder(const std::string& folderName) {
     FolderNode* newNode = new FolderNode(folderName);
     newNode->next = head;
     head = newNode;
 }
 
-// Remove a folder from the linked list
 void FileExplorer::removeFolder(const std::string& folderName) {
     FolderNode* current = head;
     FolderNode* prev = nullptr;
@@ -29,7 +26,7 @@ void FileExplorer::removeFolder(const std::string& folderName) {
         current = current->next;
     }
 
-    if (current == nullptr) return; // Folder not found
+    if (current == nullptr) return;
 
     if (prev == nullptr) {
         head = current->next;
@@ -40,7 +37,6 @@ void FileExplorer::removeFolder(const std::string& folderName) {
     delete current;
 }
 
-// Display all folders in the linked list
 void FileExplorer::displayFolders(std::ostream& out) const {
     FolderNode* current = head;
     while (current != nullptr) {
@@ -71,14 +67,12 @@ FileManager* FileExplorer::getFolderfiles(const std::string& folderName) {
         }
         current = current->next;
     }
-    return nullptr; // Folder not found
+    return nullptr;
 }
 
-// Generate DOT file for a single folder's tree
 void generateDotFile(SplayTree<std::string>::Node* root, std::ofstream& out, const std::string& prefix) {
     if (!root) return;
 
-    // Write the node itself
     if (root->left) {
         out << "    \"" << prefix << root->key << "\" -> \"" << prefix << root->left->key << "\";\n";
         generateDotFile(root->left, out, prefix);
@@ -89,11 +83,10 @@ void generateDotFile(SplayTree<std::string>::Node* root, std::ofstream& out, con
     }
 }
 
-// Export the entire FileExplorer structure to a DOT file
 void FileExplorer::exportToDot(const std::string& filename) const {
     std::ofstream out(filename);
     out << "digraph FileExplorer {\n";
-    out << "    node [shape=folder];\n"; // Optional: Set node style for folders
+    out << "    node [shape=folder];\n";
 
     FolderNode* current = head;
     while (current != nullptr) {
