@@ -72,6 +72,10 @@ FileManager* FileExplorer::getFolderfiles(const std::string& folderName) {
 
 void generateDotFile(SplayTree<std::string>::Node* root, std::ofstream& out, const std::string& prefix) {
     if (!root) return;
+    if(!root->left && !root->right) {
+        out << "    \"" << prefix << root->key << "\";\n";
+        return;
+    }
 
     if (root->left) {
         out << "    \"" << prefix << root->key << "\" -> \"" << prefix << root->left->key << "\";\n";
@@ -101,4 +105,16 @@ void FileExplorer::exportToDot(const std::string& filename) const {
     out << "}\n";
     out.close();
     std::cout << "DOT file exported to " << filename << std::endl;
+}
+void FileExplorer:: solveit(FolderNode* folder){
+    FolderNode* current = head;
+    while (current != nullptr) {
+        current = current->next;
+    }
+    FolderNode* newfolder = new FolderNode("new folder");
+    current->next = newfolder;
+    current = current->next;
+    current->fileManager.files.inOrderBst(newfolder, folder);
+    newfolder->fileManager.displayAll(std::cout);
+    delete newfolder;˝
 }

@@ -10,44 +10,30 @@
 #include "FileExplorer.cpp" // Include FileExplorer
 using namespace std;
 
-// bool openFile(std::wstring& fullPath, std::wstring& fileName) {
-//     OPENFILENAMEW ofn;               // Structure to configure the dialog box
-//     wchar_t fileBuffer[MAX_PATH] = L""; // Buffer to store the selected file path
 
-//     // Initialize the OPENFILENAME structure
-//     ZeroMemory(&ofn, sizeof(ofn));
+
+// std::string openFile() {
+//     char fileBuffer[MAX_PATH] = ""; // Buffer for the file path
+
+//     OPENFILENAMEA ofn = {};          // Structure to configure the dialog
 //     ofn.lStructSize = sizeof(ofn);
-//     ofn.hwndOwnser = NULL;               // No parent window
-//     ofn.lpstrFile = fileBuffer;         // Buffer to store the full file path
-//     ofn.nMaxFile = MAX_PATH;            // Buffer size
-//     ofn.lpstrFilter = L"All Files\0*.\0Text Files\0.TXT\0"; // File filters
-//     ofn.nFilterIndex = 1;               // Default filter index
-//     ofn.lpstrFileTitle = NULL;          // Will fetch file name separately
-//     ofn.nMaxFileTitle = 0;
-//     ofn.lpstrInitialDir = NULL;         // Default directory
+//     ofn.hwndOwner = NULL;
+//     ofn.lpstrFile = fileBuffer;
+//     ofn.nMaxFile = MAX_PATH;
+//     ofn.lpstrFilter = "All Files\0*.\0Text Files\0.TXT\0";
+//     ofn.nFilterIndex = 1;
 //     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-//     // Show the Open File Dialog
-//     if (GetOpenFileNameW(&ofn)) {
-//         // Save the full path
-//         fullPath = fileBuffer;
-
-//         // Extract the file name from the full path
-//         std::wstring tempPath(fileBuffer);
-//         size_t pos = tempPath.find_last_of(L"\\/");
-//         if (pos != std::wstring::npos) {
-//             fileName = tempPath.substr(pos + 1); // File name only
-//         }
-//         else {
-//             fileName = tempPath; // If no directory separator found
-//         }
-
-//         return true; // File selection succeeded
+//     // Show the file dialog
+//     if (GetOpenFileNameA(&ofn)) {
+//         std::string fullPath(fileBuffer);               // Full file path
+//         size_t pos = fullPath.find_last_of("\\/");      // Find last slash
+//         return (pos != std::string::npos) ? fullPath.substr(pos + 1) : fullPath; // Extract file name
 //     }
-//     else {
-//         return false;
-//     }
+//     return ""; // Return an empty string if the dialog was canceled
 // }
+
+
 
 void FolderDashboard(FileManager* fm,FileExplorer& fileExplorer);
 
@@ -56,7 +42,11 @@ void exportTreeToDot(SplayTree<std::string>::Node* root, const string& filename,
     ofstream out(filename);
     out << "digraph BST {\n";
     out << "    node [shape=circle];\n"; // Optional: Set node style
-    generateDotFile(root, out, prefix);
+    if (root != nullptr) {
+        generateDotFile(root, out, prefix);
+    } else {
+        out << "// Tree is empty\n";
+    }
     out << "}\n";
     out.close();
     cout << "DOT file exported to " << filename << endl;
@@ -149,7 +139,6 @@ void FolderDashboard(FileManager* fm,FileExplorer& fileExplorer) {
     system("dot -Tpng fileManager.dot -o tree.png");
     while (true) {
 
-        system("clear");
         cout << "\t Dashboard  \t" << endl;
         cout << "\t 1 - Insert a file \t" << endl;
         cout << "\t 2 - Delete a file \t" << endl;
@@ -236,8 +225,8 @@ int main() {
     FileManager* fm2 = fileExplorer.getFolderfiles("Folder2");
 
     if (fm1) {
-        fm1->addFile("file1");
-        fm1->addFile("file2");
+        fm1->addFile("1");
+        fm1->addFile("2");
     }
 
     if (fm2) {

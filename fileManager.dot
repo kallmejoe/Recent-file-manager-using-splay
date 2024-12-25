@@ -1,4 +1,5 @@
 digraph BST {
     node [shape=circle];
-    "fileManager_file2" -> "fileManager_file1";
+    "fileManager_2" -> "fileManager_1";
+    "fileManager_1";
 }

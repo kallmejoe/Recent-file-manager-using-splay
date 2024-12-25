@@ -20,11 +20,11 @@ public:
 class FileExplorer {
 public:
     class FolderNode {
-    public:
-        std::string folderName;
-        FolderNode* next;
-        FileManager fileManager;
-        FolderNode(const std::string& name) : folderName(name), next(nullptr) {}
+        public:
+            std::string folderName;
+            FolderNode* next;
+            FileManager fileManager;
+            FolderNode(const std::string& name) : folderName(name), next(nullptr) {}
     };
 
     FolderNode* head;
@@ -37,4 +37,6 @@ public:
     FileManager* getFolderfiles(const std::string& folderName);
     void exportToDot(const std::string& filename) const;
     void moveToHead(FolderNode* folder);
+    void solveit(FolderNode* folder);
+    
 };

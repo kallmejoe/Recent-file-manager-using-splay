@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "MainFileManager.h"
 
 template <typename T>
 class SplayTree
@@ -38,6 +39,8 @@ public:
     void inorder(std::ostream& out) const;              // Full traversal
     void inorder(std::ostream& out, int maxDepth) const; // Depth-limited traversal
     void access(const T& key);
+    void insertBst(Node* file);
+    void inOrderBst( FileExplorer::FolderNode* newfolder,  FileExplorer::FolderNode* folder);
 
 private:
     void inorderAux(std::ostream& out, Node* subtreeRoot, int currentDepth, int maxDepth) const;
@@ -206,11 +209,16 @@ void SplayTree<T>::remove(const T& key)
     if (!root)
         return;
 
-    root = splayHelper(root, key);
-    system("pause");
-    root->time = time(NULL);
+
     if (!search(key))
         return;
+
+    if(!root->left && !root->right)
+    {
+        delete root;
+        root = nullptr;
+        return;
+    }
 
     Node* temp;
 
@@ -261,4 +269,39 @@ template <typename T>
 typename SplayTree<T>::Node* SplayTree<T>::getRoot()
 {
     return root;
+}
+
+template <typename T>
+void SplayTree<T>::insertBst(Node* file) {
+
+    if (!root) {
+        root = file;
+        return;
+    }
+
+    Node* current = root;
+    Node* parent = nullptr;
+
+    while (current) {
+        parent = current;
+        if (file->time < current->time) {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
+    }
+
+    if (file->time < parent->time) {
+        parent->left = file;
+    } else {
+        parent->right = file;
+    }
+
+}
+template <typename T>
+void SplayTree<T>::inOrderBst( FileExplorer::FolderNode* newfolder, FileExplorer::FolderNode* folder){
+    if(root == nullptr) return;
+    inOrderBst(root->left, newfolder, folder);
+    newfolder->fileManager.files.insertBst(folder->fileManager.files.root);
+    inOrderBst(root->right, newfolder, folder);
 }
